@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Carbono de Resíduos</title>
+  <link rel="icon" href="ecologia.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://wallpaperaccess.com/full/5642707.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #28a745;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .impact-info {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .error {
+      color: #ff0000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Calculadora de Carbono de Resíduos</h2>
+
+    <label for="tipo">Tipo de Resíduo:</label>
+    <select id="tipo" onchange="mostrarImpacto()">
+      <option value="papel">Papel</option>
+      <option value="plastico">Plástico</option>
+      <option value="metal">Metal</option>
+      <option value="vidro">Vidro</option>
+      <option value="organico">Orgânico</option>
+      <option value="eletronico">Eletrônico</option>
+      <option value="têxtil">Têxtil</option>
+      <option value="borracha">Borracha</option>
+      <option value="madeira">Madeira</option>
+      <option value="baterias">Baterias</option>
+      <option value="lâmpadas">Lâmpadas</option>
+    </select>
+
+    <label for="peso">Peso (em kg):</label>
+    <input type="number" id="peso" placeholder="Exemplo: 1.5" step="0.1" min="0">
+
+    <button onclick="calcularEmissao()">Calcular Emissão de CO₂</button>
+
+    <div id="resultado" class="result"></div>
+    <div id="impacto" class="impact-info"></div>
+  </div>
+
+  <script>
+    const fatoresDeEmissao = {
+      'papel': 1.7,
+      'plastico': 6.0,
+      'metal': 2.0,
+      'vidro': 0.4,
+      'organico': 1.0,
+      'eletronico': 8.0,
+      'têxtil': 3.6,
+      'borracha': 5.0,
+      'madeira': 1.8,
+      'baterias': 10.0,
+      'lâmpadas': 7.5
+    };
+
+    const impactoAmbiental = {
+      'papel': 'A decomposição do papel emite metano, um gás de efeito estufa muito potente, contribuindo para as mudanças climáticas.',
+      'plastico': 'O plástico leva centenas de anos para se decompor, liberando microplásticos e toxinas que poluem o solo e a água.',
+      'metal': 'A produção de metal requer muita energia, resultando em emissões significativas de CO2 e contribuindo para o aquecimento global.',
+      'vidro': 'Embora reciclável, o vidro na natureza demora muito para se decompor, consumindo energia e recursos para ser processado.',
+      'organico': 'Resíduos orgânicos em decomposição produzem metano, que é mais potente que o CO2 em termos de efeito estufa.',
+      'eletronico': 'Resíduos eletrônicos liberam substâncias tóxicas e, ao serem incinerados, contribuem com CO2 e poluentes no ar.',
+      'têxtil': 'O descarte de tecidos e roupas libera microfibras e consome muita água e energia em sua produção.',
+      'borracha': 'Resíduos de borracha levam séculos para se decompor, liberando substâncias tóxicas e poluentes durante a decomposição.',
+      'madeira': 'A decomposição da madeira gera metano e dióxido de carbono, gases que contribuem para o aquecimento global.',
+      'baterias': 'As baterias contêm metais pesados e produtos químicos que poluem o solo e a água e liberam CO2 durante a decomposição.',
+      'lâmpadas': 'O descarte inadequado de lâmpadas libera mercúrio e outros gases poluentes que afetam a atmosfera.'
+    };
+
+    function calcularEmissao() {
+      const tipo = document.getElementById('tipo').value;
+      const peso = parseFloat(document.getElementById('peso').value);
+
+      if (isNaN(peso) || peso <= 0) {
+        document.getElementById('resultado').innerHTML = '<span class="error">Por favor, insira um peso válido.</span>';
+        return;
+      }
+
+      const emissao = fatoresDeEmissao[tipo] * peso;
+
+      const nomeResiduos = {
+        'papel': 'Papel',
+        'plastico': 'Plástico',
+        'metal': 'Metal',
+        'vidro': 'Vidro',
+        'organico': 'Orgânico',
+        'eletronico': 'Eletrônico',
+        'têxtil': 'Têxtil',
+        'borracha': 'Borracha',
+        'madeira': 'Madeira',
+        'baterias': 'Baterias',
+        'lâmpadas': 'Lâmpadas'
+      };
+
+      document.getElementById('resultado').innerText = `A emissão de carbono para ${peso} kg de ${nomeResiduos[tipo]} é aproximadamente ${emissao.toFixed(2)} kg de CO₂.`;
+    }
+
+    function mostrarImpacto() {
+      const tipo = document.getElementById('tipo').value;
+      document.getElementById('impacto').innerText = impactoAmbiental[tipo];
+    }
+
+    window.onload = mostrarImpacto;
+  </script>
+</body>
+
+</html>
